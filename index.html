@@ -2,138 +2,119 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>管理介面 - Will 棒球成長軌跡</title>
+  <title>Will 的棒球成長軌跡</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background: #f9f9f9;
-    }
-    h1 {
-      color: #c8102e;
-      text-align: center;
-    }
-    form {
-      margin-bottom: 30px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      background: #0b1d3a;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #c8102e;
-    }
-    .output {
-      margin-top: 20px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    pre {
-      background: #eee;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-x: auto;
-    }
-    .forms-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: space-between;
-    }
-    .form-box {
-      flex: 1;
-      min-width: 300px;
-    }
-    @media (max-width: 768px) {
-      .forms-container {
-        flex-direction: column;
-      }
+    body { margin:0; font-family: Arial, sans-serif; line-height:1.6; }
+    header.hero { display:flex; flex-wrap:wrap; align-items:center; padding:40px; background:linear-gradient(to right,#0b1d3a,#c8102e); color:white; }
+    .hero-left img { max-width:300px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4); }
+    .hero-right { flex:1; padding:20px; }
+    .hero-right h1 { font-size:2.5em; margin-bottom:10px; }
+    .hero-right p { font-size:1.2em; font-style:italic; }
+
+    section { padding:40px 20px; max-width:900px; margin:auto; opacity:0; transform:translateY(30px); transition:all 0.6s ease-out; }
+    section.visible { opacity:1; transform:translateY(0); }
+
+    .timeline { border-left:3px solid #c8102e; padding-left:20px; }
+    .timeline div { margin-bottom:20px; }
+    .stats { display:flex; flex-wrap:wrap; gap:20px; }
+    .stat-card { flex:1; min-width:200px; background:#f4f4f4; padding:20px; border-radius:8px; text-align:center; }
+
+    .video-container { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:100%; }
+    .video-container iframe { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+
+    footer { text-align:center; padding:20px; background:#0b1d3a; color:white; }
+    footer a { color:white; margin:0 10px; text-decoration:none; font-weight:bold; }
+    footer a:hover { text-decoration:underline; }
+
+    @media(max-width:768px){
+      header.hero { flex-direction:column; text-align:center; }
+      .hero-right { margin-left:0; }
     }
   </style>
 </head>
 <body>
-  <h1>管理介面</h1>
-
-  <div class="forms-container">
-    <!-- Timeline 表單 -->
-    <div class="form-box">
-      <form id="timelineForm">
-        <h2>新增 Timeline 事件</h2>
-        <label for="year">年份：</label>
-        <input type="text" id="year" required>
-        <label for="event">事件：</label>
-        <input type="text" id="event" required>
-        <button type="submit">新增事件</button>
-      </form>
+  <!-- Hero 區塊 -->
+  <header class="hero">
+    <div class="hero-left">
+      <img src="IMG_7457.jpg" alt="Will 棒球照片">
     </div>
-
-    <!-- Stats 表單 -->
-    <div class="form-box">
-      <form id="statsForm">
-        <h2>新增 Stats 數據</h2>
-        <label for="label">數據名稱：</label>
-        <input type="text" id="label" required>
-        <label for="value">數值：</label>
-        <input type="text" id="value" required>
-        <button type="submit">新增數據</button>
-      </form>
+    <div class="hero-right">
+      <h1>Will 的棒球成長軌跡</h1>
+      <p>挑戰極限，精準前進</p>
     </div>
-  </div>
+  </header>
 
-  <div class="output">
-    <h2>JSON 預覽</h2>
-    <h3>Timeline</h3>
-    <pre id="timelineOutput">[]</pre>
-    <h3>Stats</h3>
-    <pre id="statsOutput">[]</pre>
-  </div>
+  <!-- 成長紀錄 -->
+  <section>
+    <h2>成長紀錄</h2>
+    <div class="timeline">
+      <div><strong>2020</strong> - 開始少棒訓練</div>
+      <div><strong>2022</strong> - 青少棒比賽初登場</div>
+      <div><strong>2025</strong> - 投打雙修，展現潛力</div>
+    </div>
+  </section>
 
+  <!-- 數據表現 -->
+  <section>
+    <h2>數據與表現</h2>
+    <div class="stats">
+      <div class="stat-card">打擊率：.320</div>
+      <div class="stat-card">投球 ERA：2.45</div>
+      <div class="stat-card">最快球速：145 km/h</div>
+    </div>
+  </section>
+
+  <!-- 目標與夢想 -->
+  <section>
+    <h2>目標與夢想</h2>
+    <p>持續挑戰自我，朝向更高層級的棒球舞台邁進。</p>
+  </section>
+
+  <!-- 影片嵌入 -->
+  <section>
+    <h2>影片與直播</h2>
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/你的影片ID" 
+        title="YouTube video player" frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <!-- IG 貼文嵌入 -->
+  <section>
+    <h2>最新 IG 貼文</h2>
+    <blockquote class="instagram-media" 
+      data-instgrm-permalink="https://www.instagram.com/p/你的貼文ID/" 
+      data-instgrm-version="14"></blockquote>
+    <script async src="//www.instagram.com/embed.js"></script>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 Will Baseball Journey</p>
+    <p>
+      <a href="https://www.instagram.com/你的IG帳號" target="_blank">Instagram</a> |
+      <a href="https://www.youtube.com/你的YouTube頻道" target="_blank">YouTube</a>
+    </p>
+  </footer>
+
+  <!-- 滾動動畫 -->
   <script>
-    let timelineData = [];
-    let statsData = [];
-
-    // Timeline 表單處理
-    document.getElementById("timelineForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      const year = document.getElementById("year").value;
-      const event = document.getElementById("event").value;
-      timelineData.push({year, event});
-      document.getElementById("timelineOutput").textContent = JSON.stringify(timelineData, null, 2);
-      this.reset();
-    });
-
-    // Stats 表單處理
-    document.getElementById("statsForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      const label = document.getElementById("label").value;
-      const value = document.getElementById("value").value;
-      statsData.push({label, value});
-      document.getElementById("statsOutput").textContent = JSON.stringify(statsData, null, 2);
-      this.reset();
-    });
+    const sections = document.querySelectorAll("section");
+    const revealOnScroll = () => {
+      const triggerBottom = window.innerHeight * 0.85;
+      sections.forEach(sec => {
+        const boxTop = sec.getBoundingClientRect().top;
+        if(boxTop < triggerBottom){
+          sec.classList.add("visible");
+        }
+      });
+    };
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll();
   </script>
 </body>
 </html>
