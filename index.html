@@ -1,120 +1,427 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>Will 的棒球成長軌跡</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { margin:0; font-family: Arial, sans-serif; line-height:1.6; }
-    header.hero { display:flex; flex-wrap:wrap; align-items:center; padding:40px; background:linear-gradient(to right,#0b1d3a,#c8102e); color:white; }
-    .hero-left img { max-width:300px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.4); }
-    .hero-right { flex:1; padding:20px; }
-    .hero-right h1 { font-size:2.5em; margin-bottom:10px; }
-    .hero-right p { font-size:1.2em; font-style:italic; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WILL — 棒球成長紀錄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --blue:#005A9C;--blue-mid:#1A7BC4;--blue-light:#4AAEE8;
+    --blue-pale:#E8F4FC;--gold:#C9A84C;--gold-light:#E8C96A;
+    --white:#FFFFFF;--off:#F5F9FD;--text:#0D2B45;--muted:#5A7A96;
+    --border:rgba(0,90,156,0.12);
+  }
+  html{scroll-behavior:smooth;}
+  body{background:var(--off);color:var(--text);font-family:'Noto Sans TC',sans-serif;overflow-x:hidden;}
 
-    section { padding:40px 20px; max-width:900px; margin:auto; opacity:0; transform:translateY(30px); transition:all 0.6s ease-out; }
-    section.visible { opacity:1; transform:translateY(0); }
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.94);backdrop-filter:blur(10px);border-bottom:0.5px solid var(--border);}
+  .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:13px 24px;}
+  .nav-logo{font-family:'Oswald',sans-serif;font-size:19px;font-weight:700;color:var(--blue);letter-spacing:3px;}
+  .nav-links{display:flex;gap:24px;list-style:none;}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:1.5px;transition:color .2s;}
+  .nav-links a:hover{color:var(--blue);}
 
-    .timeline { border-left:3px solid #c8102e; padding-left:20px; }
-    .timeline div { margin-bottom:20px; }
-    .stats { display:flex; flex-wrap:wrap; gap:20px; }
-    .stat-card { flex:1; min-width:200px; background:#f4f4f4; padding:20px; border-radius:8px; text-align:center; }
+  /* HERO */
+  .hero{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+  .hero-bg{position:absolute;inset:0;background:#0a2a45;}
+  .hero-bg-img{position:absolute;inset:0;background-size:cover;background-position:center top;opacity:0;}
+  .hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,30,60,0.82) 0%,rgba(0,30,60,0.5) 50%,rgba(0,20,50,0.2) 100%);}
+  .hero-overlay-bottom{position:absolute;bottom:0;left:0;right:0;height:45%;background:linear-gradient(to top,rgba(0,20,50,0.65),transparent);}
+  .hero-subject{position:absolute;bottom:0;right:5%;width:clamp(240px,35vw,460px);height:92%;background-size:contain;background-position:bottom center;background-repeat:no-repeat;opacity:0;}
+  .hero-content{position:relative;z-index:3;padding:0 6% 64px;max-width:580px;}
+  .hero-lang{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:3px;margin-bottom:14px;}
+  .hero-pos{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+  .pos-badge{border:1px solid rgba(255,255,255,0.45);color:#fff;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;padding:5px 14px;border-radius:2px;background:rgba(255,255,255,0.08);}
+  .pos-badge.gold{border-color:var(--gold);color:var(--gold-light);background:rgba(201,168,76,0.1);}
+  .hero-name{font-family:'Oswald',sans-serif;font-size:clamp(72px,12vw,130px);font-weight:700;line-height:.88;letter-spacing:4px;color:#fff;}
+  .hero-name span{color:var(--gold-light);}
+  .hero-tagline{font-size:14px;color:rgba(255,255,255,0.6);margin-top:16px;line-height:1.75;}
+  .hero-tagline em{color:rgba(255,255,255,0.32);font-style:normal;font-size:12px;display:block;margin-top:6px;}
+  .hero-stats{display:flex;gap:28px;margin-top:32px;}
+  .hstat-num{font-family:'Oswald',sans-serif;font-size:28px;color:var(--gold-light);}
+  .hstat-label{font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:2px;margin-top:2px;}
+  .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .scroll-hint span{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;}
+  .scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.3));animation:sp 2s infinite;}
+  @keyframes sp{0%,100%{opacity:.3}50%{opacity:1}}
 
-    .video-container { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:100%; }
-    .video-container iframe { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+  .wave{display:block;width:100%;line-height:0;background:#0a2a45;}
+  .wave svg{display:block;}
+  .sw{background:var(--off);}
+  section{max-width:1100px;margin:0 auto;padding:72px 24px;}
+  .slabel{font-size:11px;letter-spacing:4px;color:var(--blue-mid);margin-bottom:8px;}
+  .stitle{font-family:'Oswald',sans-serif;font-size:clamp(24px,4vw,38px);font-weight:500;color:var(--text);margin-bottom:4px;}
+  .stitle-sub{font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:36px;}
+  .divider{width:100%;height:.5px;background:var(--border);}
 
-    footer { text-align:center; padding:20px; background:#0b1d3a; color:white; }
-    footer a { color:white; margin:0 10px; text-decoration:none; font-weight:bold; }
-    footer a:hover { text-decoration:underline; }
+  /* TIMELINE */
+  .tl{position:relative;padding-left:32px;}
+  .tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--blue),var(--blue-light));border-radius:2px;}
+  .tli{position:relative;margin-bottom:40px;}
+  .tli-dot{position:absolute;left:-38px;top:5px;width:14px;height:14px;border:2px solid var(--blue-mid);border-radius:50%;background:#fff;}
+  .tli-year{font-family:'Oswald',sans-serif;font-size:13px;color:var(--blue-mid);letter-spacing:2px;margin-bottom:4px;}
+  .tli-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:3px;}
+  .tli-en{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;}
+  .tli-desc{font-size:13px;color:var(--muted);line-height:1.75;}
 
-    @media(max-width:768px){
-      header.hero { flex-direction:column; text-align:center; }
-      .hero-right { margin-left:0; }
-    }
-  </style>
+  /* VIDEO */
+  .video-wrap{width:100%;max-width:820px;margin:0 auto;border-radius:8px;overflow:hidden;border:.5px solid var(--border);background:#000;}
+  .video-wrap iframe{width:100%;aspect-ratio:16/9;display:block;border:none;}
+  .video-placeholder{width:100%;aspect-ratio:16/9;background:var(--blue-pale);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;}
+  .video-placeholder svg{width:44px;height:44px;stroke:var(--blue-light);fill:none;stroke-width:1.5;}
+  .video-placeholder span{font-size:13px;color:var(--muted);}
+  .input-row{max-width:820px;margin:16px auto 0;display:flex;gap:10px;}
+  .input-row input{flex:1;padding:10px 14px;border:.5px solid var(--border);border-radius:6px;font-size:13px;background:#fff;color:var(--text);outline:none;}
+  .input-row input:focus{border-color:var(--blue-light);}
+  .btn-blue{padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:background .2s;}
+  .btn-blue:hover{background:var(--blue-mid);}
+  .input-hint{max-width:820px;margin:8px auto 0;font-size:12px;color:var(--muted);}
+
+  /* CAROUSEL */
+  .carousel{position:relative;overflow:hidden;border-radius:8px;background:var(--blue-pale);max-width:900px;margin:0 auto;}
+  .c-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1);}
+  .c-slide{min-width:100%;aspect-ratio:4/3;background-size:cover;background-position:center;position:relative;flex-shrink:0;}
+  .c-slide-ph{min-width:100%;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--blue-pale);}
+  .c-slide-ph svg{width:36px;height:36px;stroke:var(--blue-light);fill:none;stroke-width:1.5;}
+  .c-slide-ph span{font-size:12px;color:var(--muted);}
+  .c-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,20,50,.72),transparent);padding:20px 18px 14px;color:#fff;font-size:13px;}
+  .c-tag{font-size:10px;letter-spacing:2px;color:var(--gold-light);margin-bottom:3px;}
+  .c-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:5;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+  .c-btn:hover{background:#fff;}
+  .c-btn svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:2;}
+  .c-prev{left:12px;} .c-next{right:12px;}
+  .c-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+  .cdot{width:8px;height:8px;border-radius:50%;background:var(--border);border:none;cursor:pointer;padding:0;transition:background .2s;}
+  .cdot.active{background:var(--blue-mid);}
+  .photo-add{max-width:900px;margin:14px auto 0;display:flex;gap:8px;flex-wrap:wrap;}
+  .photo-add input{flex:1;min-width:180px;padding:9px 14px;border:.5px solid var(--border);border-radius:6px;font-size:13px;background:#fff;color:var(--text);outline:none;}
+  .photo-add input:focus{border-color:var(--blue-light);}
+  .photo-add select{padding:9px 12px;border:.5px solid var(--border);border-radius:6px;font-size:13px;background:#fff;color:var(--text);outline:none;}
+  .btn-red{padding:9px 14px;background:#fff;color:#c0392b;border:.5px solid #c0392b;border-radius:6px;font-size:13px;cursor:pointer;}
+
+  /* STATS */
+  .stats-note{font-size:13px;color:var(--muted);margin-bottom:24px;padding:13px 18px;border-left:3px solid var(--blue-light);background:#fff;border-radius:0 6px 6px 0;}
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+  .stat-card{background:#fff;border:.5px solid var(--border);border-radius:8px;padding:20px;transition:border-color .2s;}
+  .stat-card:hover{border-color:var(--blue-light);}
+  .stat-label{font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;}
+  .stat-val{font-family:'Oswald',sans-serif;font-size:34px;color:var(--blue);font-weight:500;}
+  .stat-ph{color:rgba(0,90,156,0.2);}
+  .stat-unit{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+
+  /* MILESTONES */
+  .ml-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+  .ml-card{background:#fff;border:.5px solid var(--border);border-radius:8px;padding:22px;position:relative;overflow:hidden;transition:box-shadow .2s;}
+  .ml-card:hover{box-shadow:0 4px 16px rgba(0,90,156,0.08);}
+  .ml-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--blue),var(--blue-light));}
+  .ml-num{font-family:'Oswald',sans-serif;font-size:48px;font-weight:700;color:rgba(0,90,156,0.05);position:absolute;right:14px;top:10px;}
+  .ml-date{font-size:11px;color:var(--blue-mid);letter-spacing:2px;margin-bottom:7px;}
+  .ml-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px;}
+  .ml-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+
+  .accent{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%);padding:52px 24px;text-align:center;}
+  .accent-q{font-family:'Oswald',sans-serif;font-size:clamp(18px,3vw,26px);color:#fff;font-weight:400;line-height:1.6;}
+  .accent-q span{color:var(--gold-light);}
+  .accent-langs{margin-top:18px;display:flex;flex-direction:column;gap:5px;align-items:center;}
+  .accent-langs p{font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:1px;}
+
+  .about-ph{border:1.5px dashed rgba(0,90,156,0.18);border-radius:8px;padding:60px;text-align:center;background:#fff;}
+  .about-ph-title{font-family:'Oswald',sans-serif;font-size:20px;color:rgba(0,90,156,0.22);letter-spacing:3px;margin-bottom:10px;}
+  .about-ph-text{font-size:13px;color:rgba(90,122,150,0.45);letter-spacing:1px;}
+
+  footer{background:var(--blue);padding:36px 24px;text-align:center;}
+  footer p{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.45);}
+  footer strong{color:var(--gold-light);font-weight:500;}
+
+  @media(max-width:640px){.nav-links{display:none;}.hero-name{font-size:72px;}.hero-stats{gap:16px;}}
+</style>
 </head>
 <body>
-  <!-- Hero 區塊 -->
-  <header class="hero">
-    <div class="hero-left">
-      <img src="IMG_7457.jpg" alt="Will 棒球照片">
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">WILL</div>
+    <ul class="nav-links">
+      <li><a href="#story">成長軌跡</a></li>
+      <li><a href="#video">精彩影片</a></li>
+      <li><a href="#gallery">照片集錦</a></li>
+      <li><a href="#stats">數據統計</a></li>
+      <li><a href="#milestones">里程碑</a></li>
+      <li><a href="#about">關於</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-img" id="heroBg"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay-bottom"></div>
+  <div class="hero-subject" id="heroSubject"></div>
+  <div class="hero-content">
+    <div class="hero-lang">棒球成長紀錄 · Baseball Journey · 野球の軌跡</div>
+    <div class="hero-pos">
+      <div class="pos-badge">SS 游擊手</div>
+      <div class="pos-badge gold">C 捕手</div>
     </div>
-    <div class="hero-right">
-      <h1>Will 的棒球成長軌跡</h1>
-      <p>挑戰極限，精準前進</p>
+    <div class="hero-name">W<span>I</span>LL</div>
+    <div class="hero-tagline">
+      從10歲踏上球場，以游擊手的視野與捕手的鬥志，書寫屬於自己的棒球故事。
+      <em>Since 2022 · Taiwan · Age 12</em>
     </div>
-  </header>
-
-  <!-- 成長紀錄 -->
-  <section>
-    <h2>成長紀錄</h2>
-    <div class="timeline">
-      <div><strong>2020</strong> - 開始少棒訓練</div>
-      <div><strong>2022</strong> - 青少棒比賽初登場</div>
-      <div><strong>2025</strong> - 投打雙修，展現潛力</div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">2022</div><div class="hstat-label">入門元年</div></div>
+      <div class="hstat"><div class="hstat-num">12</div><div class="hstat-label">歲 · Age</div></div>
+      <div class="hstat"><div class="hstat-num">SS/C</div><div class="hstat-label">守備位置</div></div>
     </div>
-  </section>
+  </div>
+  <div class="scroll-hint"><span>SCROLL</span><div class="scroll-line"></div></div>
 
-  <!-- 數據表現 -->
-  <section>
-    <h2>數據與表現</h2>
-    <div class="stats">
-      <div class="stat-card">打擊率：.320</div>
-      <div class="stat-card">投球 ERA：2.45</div>
-      <div class="stat-card">最快球速：145 km/h</div>
+
+</div>
+
+<div class="wave"><svg viewBox="0 0 1200 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" width="100%" height="56"><path d="M0,0 C300,56 900,0 1200,44 L1200,0 Z" fill="#F5F9FD"/></svg></div>
+
+<div class="sw">
+<section id="story">
+  <div class="slabel">GROWTH TIMELINE · 成長の軌跡</div>
+  <div class="stitle">成長軌跡</div>
+  <div class="stitle-sub">Growth Timeline · 成長タイムライン</div>
+  <div class="tl">
+    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2022</div><div class="tli-title">棒球元年 — 踏入球場</div><div class="tli-en">First Year · 野球元年</div><div class="tli-desc">10歲，第一次認真拿起球棒與捕手裝備，開始系統性訓練。對棒球的熱情從這一年被點燃。</div></div>
+    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2023</div><div class="tli-title">雙守備位置確立</div><div class="tli-en">Dual Position · 二刀流守備</div><div class="tli-desc">確立游擊手與捕手雙守備位置路線，鍛鍊傳球精準度、閱讀比賽能力與捕手領導特質。</div></div>
+    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2024 — 2025</div><div class="tli-title">競技舞台 — 實戰淬鍊</div><div class="tli-en">Competition · 実戦経験</div><div class="tli-desc">參與各級別比賽，在真實對抗中累積經驗，不斷突破自我極限。</div></div>
+    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2025 →</div><div class="tli-title">下一個目標</div><div class="tli-en">Next Goal · 次の目標</div><div class="tli-desc">朝美國、日本棒球學校選拔目標邁進，書寫屬於自己的棒球故事。</div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="video">
+  <div class="slabel">HIGHLIGHT REEL · 精彩集錦 · ハイライト</div>
+  <div class="stitle">精彩影片</div>
+  <div class="stitle-sub">Highlight Video · ハイライト動画</div>
+  <div class="video-wrap">
+    <div class="video-placeholder" id="videoPH">
+      <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <span>貼入 YouTube 連結後載入</span>
     </div>
-  </section>
+    <iframe id="videoFrame" src="" allow="autoplay;fullscreen" allowfullscreen style="display:none;width:100%;aspect-ratio:16/9;border:none;"></iframe>
+  </div>
+  <div class="input-row">
+    <input id="videoInput" placeholder="YouTube 影片網址（支援不公開影片）">
+    <button class="btn-blue" onclick="loadVideo()">載入影片</button>
+  </div>
+  <div class="input-hint">建議上傳至 YouTube 並設定為「不公開」，有連結才看得到，不出現在搜尋結果。</div>
+</section>
+<div class="divider"></div>
 
-  <!-- 目標與夢想 -->
-  <section>
-    <h2>目標與夢想</h2>
-    <p>持續挑戰自我，朝向更高層級的棒球舞台邁進。</p>
-  </section>
-
-  <!-- 影片嵌入 -->
-  <section>
-    <h2>影片與直播</h2>
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/你的影片ID" 
-        title="YouTube video player" frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-      </iframe>
+<section id="gallery">
+  <div class="slabel">PHOTO GALLERY · 照片集錦 · フォトギャラリー</div>
+  <div class="stitle">照片集錦</div>
+  <div class="stitle-sub">Photo Gallery · フォトギャラリー</div>
+  <div class="carousel" id="carousel">
+    <div class="c-track" id="cTrack">
+      <div class="c-slide-ph">
+        <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12" r="3.5"/></svg>
+        <span>新增第一張照片</span>
+      </div>
     </div>
-  </section>
+    <button class="c-btn c-prev" onclick="cMove(-1)"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
+    <button class="c-btn c-next" onclick="cMove(1)"><svg viewBox="0 0 24 24"><polyline points="9,6 15,12 9,18"/></svg></button>
+  </div>
+  <div class="c-dots" id="cDots"></div>
+  <div class="photo-add">
+    <input id="pUrl" placeholder="Google Photos 單張圖片連結">
+    <input id="pTitle" placeholder="標題" style="max-width:140px;">
+    <select id="pTag">
+      <option value="比賽">比賽</option><option value="練習">練習</option>
+      <option value="守備">守備</option><option value="打擊">打擊</option><option value="隊伍">隊伍</option>
+    </select>
+    <button class="btn-blue" onclick="addPhoto()">新增</button>
+    <button class="btn-red" onclick="removePhoto()">移除此張</button>
+  </div>
+  <div style="font-size:12px;color:var(--muted);margin-top:8px;max-width:900px;margin-left:auto;margin-right:auto;">
+    Google Photos：開啟單張照片 → 右上角「⋮」→「建立連結」→ 複製貼入。
+  </div>
+</section>
+</div>
 
-  <!-- IG 貼文嵌入 -->
-  <section>
-    <h2>最新 IG 貼文</h2>
-    <blockquote class="instagram-media" 
-      data-instgrm-permalink="https://www.instagram.com/p/你的貼文ID/" 
-      data-instgrm-version="14"></blockquote>
-    <script async src="//www.instagram.com/embed.js"></script>
-  </section>
+<div class="accent">
+  <div class="accent-q">"每一次揮棒，都是<span>成為更好的自己</span>的練習。"</div>
+  <div class="accent-langs">
+    <p>"Every swing is a step toward becoming a better version of yourself."</p>
+    <p>「一振り一振りが、より良い自分への一歩。」</p>
+  </div>
+</div>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2026 Will Baseball Journey</p>
-    <p>
-      <a href="https://www.instagram.com/你的IG帳號" target="_blank">Instagram</a> |
-      <a href="https://www.youtube.com/你的YouTube頻道" target="_blank">YouTube</a>
-    </p>
-  </footer>
+<div class="sw">
+<section id="stats">
+  <div class="slabel">PERFORMANCE DATA · 成績統計 · 成績データ</div>
+  <div class="stitle">數據統計</div>
+  <div class="stitle-sub">Performance Stats · 成績データ</div>
+  <div class="stats-note">數據累積中——隨賽季推進，各項數據將陸續更新。/ Stats will be updated as the season progresses.</div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">打擊率 · AVG</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Batting Average</div></div>
+    <div class="stat-card"><div class="stat-label">出賽場次 · GAMES</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Games Played</div></div>
+    <div class="stat-card"><div class="stat-label">安打數 · HITS</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Total Hits</div></div>
+    <div class="stat-card"><div class="stat-label">打點 · RBI</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Runs Batted In</div></div>
+    <div class="stat-card"><div class="stat-label">守備率 · FLD%</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Fielding %</div></div>
+    <div class="stat-card"><div class="stat-label">盜壘 · SB</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Stolen Bases</div></div>
+  </div>
+</section>
+<div class="divider"></div>
 
-  <!-- 滾動動畫 -->
-  <script>
-    const sections = document.querySelectorAll("section");
-    const revealOnScroll = () => {
-      const triggerBottom = window.innerHeight * 0.85;
-      sections.forEach(sec => {
-        const boxTop = sec.getBoundingClientRect().top;
-        if(boxTop < triggerBottom){
-          sec.classList.add("visible");
-        }
-      });
-    };
-    window.addEventListener("scroll", revealOnScroll);
-    revealOnScroll();
-  </script>
+<section id="milestones">
+  <div class="slabel">KEY MOMENTS · 重要時刻 · 重要な瞬間</div>
+  <div class="stitle">里程碑</div>
+  <div class="stitle-sub">Key Milestones · マイルストーン</div>
+  <div class="ml-grid">
+    <div class="ml-card"><div class="ml-num">01</div><div class="ml-date">2022</div><div class="ml-title">踏上球場第一天</div><div class="ml-desc">正式開始棒球訓練，一切從零出發。/ First day of formal baseball training.</div></div>
+    <div class="ml-card"><div class="ml-num">02</div><div class="ml-date">待新增</div><div class="ml-title">生涯首支安打</div><div class="ml-desc">比賽中打出生涯第一支安打，留下歷史性時刻。</div></div>
+    <div class="ml-card"><div class="ml-num">03</div><div class="ml-date">待新增</div><div class="ml-title">首場先發出賽</div><div class="ml-desc">正式站上競技舞台，以先發身份完整出賽。</div></div>
+    <div class="ml-card"><div class="ml-num">04</div><div class="ml-date">待新增</div><div class="ml-title">重要賽事紀錄</div><div class="ml-desc">持續累積中——每一個重要時刻都將被記錄在此。</div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<section id="about">
+  <div class="slabel">PROFILE · 關於 · プロフィール</div>
+  <div class="stitle">關於 Will</div>
+  <div class="stitle-sub">About · プロフィール</div>
+  <div class="about-ph">
+    <div class="about-ph-title">COMING SOON</div>
+    <div class="about-ph-text">個人簡介、目標宣言及徵選聯絡資訊即將上線<br>Profile, goals & recruitment contact · プロフィール近日公開</div>
+  </div>
+</section>
+</div>
+
+<footer>
+  <p><strong>WILL</strong> · 棒球成長紀錄 · Baseball Journey · 野球の軌跡</p>
+  <p style="margin-top:6px;">SS 游擊手 / C 捕手 · Taiwan · Since 2022</p>
+</footer>
+
+<script>
+// ── LOAD PHOTOS FROM UPLOADED IMAGES ──
+// Catcher photo (bg) and batting photo (subject) are loaded as data URLs via fetch
+const CATCHER_SRC = 'IMG_7269.HEIC'; // fallback label only
+// We embed via canvas trick — but since we have the images shown in chat,
+// we use the two uploaded image objects directly as object URLs
+
+// Since we can't directly access uploaded files in artifact,
+// we store placeholder state and let user load via Google Photos links.
+// Hero is pre-styled with deep blue atmosphere matching the catcher photo mood.
+
+// ── VIDEO ──
+function loadVideo(){
+  const url = document.getElementById('videoInput').value.trim();
+  if(!url) return;
+  let embed = '';
+  const yt = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if(yt) embed = `https://www.youtube.com/embed/${yt[1]}?rel=0&autoplay=0`;
+  if(!embed){ alert('請貼入有效的 YouTube 網址'); return; }
+  const f = document.getElementById('videoFrame');
+  f.src = embed;
+  f.style.display = 'block';
+  document.getElementById('videoPH').style.display = 'none';
+}
+
+// ── CAROUSEL ──
+let slides = [], cur = 0;
+
+function toDirectPhoto(url){
+  // Google Photos share link
+  if(url.includes('photos.app.goo.gl') || url.includes('photos.google.com')){
+    // Can't bypass Google Photos redirect — inform user
+    return url;
+  }
+  // Imgur direct
+  if(url.includes('imgur.com') && !url.includes('i.imgur.com')){
+    return url.replace('imgur.com/', 'i.imgur.com/') + (url.includes('.') ? '' : '.jpg');
+  }
+  return url;
+}
+
+function renderCarousel(){
+  const track = document.getElementById('cTrack');
+  const dots = document.getElementById('cDots');
+  if(slides.length === 0){
+    track.innerHTML = `<div class="c-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="#4AAEE8" stroke-width="1.5" width="36" height="36"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12" r="3.5"/></svg><span>新增第一張照片</span></div>`;
+    dots.innerHTML = '';
+    return;
+  }
+  track.innerHTML = slides.map((s,i) =>
+    `<div class="c-slide" style="background-image:url('${s.url}')">
+      <div class="c-caption"><div class="c-tag">${s.tag}</div><div>${s.title}</div></div>
+    </div>`
+  ).join('');
+  dots.innerHTML = slides.map((_,i) =>
+    `<button class="cdot${i===cur?' active':''}" onclick="goTo(${i})"></button>`
+  ).join('');
+  goTo(cur, false);
+}
+
+function goTo(idx, anim=true){
+  if(!slides.length) return;
+  cur = (idx + slides.length) % slides.length;
+  const t = document.getElementById('cTrack');
+  t.style.transition = anim ? 'transform .4s cubic-bezier(.4,0,.2,1)' : 'none';
+  t.style.transform = `translateX(-${cur*100}%)`;
+  document.querySelectorAll('.cdot').forEach((d,i) => d.classList.toggle('active', i===cur));
+}
+function cMove(d){ goTo(cur+d); }
+
+function addPhoto(){
+  const url = document.getElementById('pUrl').value.trim();
+  const title = document.getElementById('pTitle').value.trim() || '照片';
+  const tag = document.getElementById('pTag').value;
+  if(!url) return;
+  slides.push({url: toDirectPhoto(url), title, tag});
+  cur = slides.length - 1;
+  document.getElementById('pUrl').value = '';
+  document.getElementById('pTitle').value = '';
+  renderCarousel();
+}
+function removePhoto(){
+  if(!slides.length) return;
+  slides.splice(cur, 1);
+  cur = Math.max(0, cur-1);
+  renderCarousel();
+}
+
+// auto-advance
+setInterval(()=>{ if(slides.length > 1) goTo(cur+1); }, 5000);
+
+// ── HERO UPLOAD ──
+function loadHeroBg(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const el = document.getElementById('heroBg');
+    el.style.backgroundImage = `url(${ev.target.result})`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center top';
+    el.style.opacity = '0.55';
+    el.style.background = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadHeroSubject(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const el = document.getElementById('heroSubject');
+    el.style.backgroundImage = `url(${ev.target.result})`;
+    el.style.opacity = '1';
+  };
+  reader.readAsDataURL(file);
+}
+</script>
 </body>
 </html>
