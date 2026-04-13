@@ -1,427 +1,506 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WILL — 棒球成長紀錄</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
-  *{margin:0;padding:0;box-sizing:border-box;}
-  :root{
-    --blue:#005A9C;--blue-mid:#1A7BC4;--blue-light:#4AAEE8;
-    --blue-pale:#E8F4FC;--gold:#C9A84C;--gold-light:#E8C96A;
-    --white:#FFFFFF;--off:#F5F9FD;--text:#0D2B45;--muted:#5A7A96;
-    --border:rgba(0,90,156,0.12);
-  }
-  html{scroll-behavior:smooth;}
-  body{background:var(--off);color:var(--text);font-family:'Noto Sans TC',sans-serif;overflow-x:hidden;}
-
-  nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.94);backdrop-filter:blur(10px);border-bottom:0.5px solid var(--border);}
-  .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:13px 24px;}
-  .nav-logo{font-family:'Oswald',sans-serif;font-size:19px;font-weight:700;color:var(--blue);letter-spacing:3px;}
-  .nav-links{display:flex;gap:24px;list-style:none;}
-  .nav-links a{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:1.5px;transition:color .2s;}
-  .nav-links a:hover{color:var(--blue);}
-
-  /* HERO */
-  .hero{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
-  .hero-bg{position:absolute;inset:0;background:#0a2a45;}
-  .hero-bg-img{position:absolute;inset:0;background-size:cover;background-position:center top;opacity:0;}
-  .hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,30,60,0.82) 0%,rgba(0,30,60,0.5) 50%,rgba(0,20,50,0.2) 100%);}
-  .hero-overlay-bottom{position:absolute;bottom:0;left:0;right:0;height:45%;background:linear-gradient(to top,rgba(0,20,50,0.65),transparent);}
-  .hero-subject{position:absolute;bottom:0;right:5%;width:clamp(240px,35vw,460px);height:92%;background-size:contain;background-position:bottom center;background-repeat:no-repeat;opacity:0;}
-  .hero-content{position:relative;z-index:3;padding:0 6% 64px;max-width:580px;}
-  .hero-lang{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:3px;margin-bottom:14px;}
-  .hero-pos{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
-  .pos-badge{border:1px solid rgba(255,255,255,0.45);color:#fff;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;padding:5px 14px;border-radius:2px;background:rgba(255,255,255,0.08);}
-  .pos-badge.gold{border-color:var(--gold);color:var(--gold-light);background:rgba(201,168,76,0.1);}
-  .hero-name{font-family:'Oswald',sans-serif;font-size:clamp(72px,12vw,130px);font-weight:700;line-height:.88;letter-spacing:4px;color:#fff;}
-  .hero-name span{color:var(--gold-light);}
-  .hero-tagline{font-size:14px;color:rgba(255,255,255,0.6);margin-top:16px;line-height:1.75;}
-  .hero-tagline em{color:rgba(255,255,255,0.32);font-style:normal;font-size:12px;display:block;margin-top:6px;}
-  .hero-stats{display:flex;gap:28px;margin-top:32px;}
-  .hstat-num{font-family:'Oswald',sans-serif;font-size:28px;color:var(--gold-light);}
-  .hstat-label{font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:2px;margin-top:2px;}
-  .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;}
-  .scroll-hint span{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;}
-  .scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.3));animation:sp 2s infinite;}
-  @keyframes sp{0%,100%{opacity:.3}50%{opacity:1}}
-
-  .wave{display:block;width:100%;line-height:0;background:#0a2a45;}
-  .wave svg{display:block;}
-  .sw{background:var(--off);}
-  section{max-width:1100px;margin:0 auto;padding:72px 24px;}
-  .slabel{font-size:11px;letter-spacing:4px;color:var(--blue-mid);margin-bottom:8px;}
-  .stitle{font-family:'Oswald',sans-serif;font-size:clamp(24px,4vw,38px);font-weight:500;color:var(--text);margin-bottom:4px;}
-  .stitle-sub{font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:36px;}
-  .divider{width:100%;height:.5px;background:var(--border);}
-
-  /* TIMELINE */
-  .tl{position:relative;padding-left:32px;}
-  .tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--blue),var(--blue-light));border-radius:2px;}
-  .tli{position:relative;margin-bottom:40px;}
-  .tli-dot{position:absolute;left:-38px;top:5px;width:14px;height:14px;border:2px solid var(--blue-mid);border-radius:50%;background:#fff;}
-  .tli-year{font-family:'Oswald',sans-serif;font-size:13px;color:var(--blue-mid);letter-spacing:2px;margin-bottom:4px;}
-  .tli-title{font-size:16px;font-weight:500;color:var(--text);margin-bottom:3px;}
-  .tli-en{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;}
-  .tli-desc{font-size:13px;color:var(--muted);line-height:1.75;}
-
-  /* VIDEO */
-  .video-wrap{width:100%;max-width:820px;margin:0 auto;border-radius:8px;overflow:hidden;border:.5px solid var(--border);background:#000;}
-  .video-wrap iframe{width:100%;aspect-ratio:16/9;display:block;border:none;}
-  .video-placeholder{width:100%;aspect-ratio:16/9;background:var(--blue-pale);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;}
-  .video-placeholder svg{width:44px;height:44px;stroke:var(--blue-light);fill:none;stroke-width:1.5;}
-  .video-placeholder span{font-size:13px;color:var(--muted);}
-  .input-row{max-width:820px;margin:16px auto 0;display:flex;gap:10px;}
-  .input-row input{flex:1;padding:10px 14px;border:.5px solid var(--border);border-radius:6px;font-size:13px;background:#fff;color:var(--text);outline:none;}
-  .input-row input:focus{border-color:var(--blue-light);}
-  .btn-blue{padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:background .2s;}
-  .btn-blue:hover{background:var(--blue-mid);}
-  .input-hint{max-width:820px;margin:8px auto 0;font-size:12px;color:var(--muted);}
-
-  /* CAROUSEL */
-  .carousel{position:relative;overflow:hidden;border-radius:8px;background:var(--blue-pale);max-width:900px;margin:0 auto;}
-  .c-track{display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1);}
-  .c-slide{min-width:100%;aspect-ratio:4/3;background-size:cover;background-position:center;position:relative;flex-shrink:0;}
-  .c-slide-ph{min-width:100%;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--blue-pale);}
-  .c-slide-ph svg{width:36px;height:36px;stroke:var(--blue-light);fill:none;stroke-width:1.5;}
-  .c-slide-ph span{font-size:12px;color:var(--muted);}
-  .c-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,20,50,.72),transparent);padding:20px 18px 14px;color:#fff;font-size:13px;}
-  .c-tag{font-size:10px;letter-spacing:2px;color:var(--gold-light);margin-bottom:3px;}
-  .c-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:5;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
-  .c-btn:hover{background:#fff;}
-  .c-btn svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:2;}
-  .c-prev{left:12px;} .c-next{right:12px;}
-  .c-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
-  .cdot{width:8px;height:8px;border-radius:50%;background:var(--border);border:none;cursor:pointer;padding:0;transition:background .2s;}
-  .cdot.active{background:var(--blue-mid);}
-  .photo-add{max-width:900px;margin:14px auto 0;display:flex;gap:8px;flex-wrap:wrap;}
-  .photo-add input{flex:1;min-width:180px;padding:9px 14px;border:.5px solid var(--border);border-radius:6px;font-size:13px;background:#fff;color:var(--text);outline:none;}
-  .photo-add input:focus{border-color:var(--blue-light);}
-  .photo-add select{padding:9px 12px;border:.5px solid var(--border);border-radius:6px;font-size:13px;background:#fff;color:var(--text);outline:none;}
-  .btn-red{padding:9px 14px;background:#fff;color:#c0392b;border:.5px solid #c0392b;border-radius:6px;font-size:13px;cursor:pointer;}
-
-  /* STATS */
-  .stats-note{font-size:13px;color:var(--muted);margin-bottom:24px;padding:13px 18px;border-left:3px solid var(--blue-light);background:#fff;border-radius:0 6px 6px 0;}
-  .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
-  .stat-card{background:#fff;border:.5px solid var(--border);border-radius:8px;padding:20px;transition:border-color .2s;}
-  .stat-card:hover{border-color:var(--blue-light);}
-  .stat-label{font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;}
-  .stat-val{font-family:'Oswald',sans-serif;font-size:34px;color:var(--blue);font-weight:500;}
-  .stat-ph{color:rgba(0,90,156,0.2);}
-  .stat-unit{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;}
-
-  /* MILESTONES */
-  .ml-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
-  .ml-card{background:#fff;border:.5px solid var(--border);border-radius:8px;padding:22px;position:relative;overflow:hidden;transition:box-shadow .2s;}
-  .ml-card:hover{box-shadow:0 4px 16px rgba(0,90,156,0.08);}
-  .ml-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--blue),var(--blue-light));}
-  .ml-num{font-family:'Oswald',sans-serif;font-size:48px;font-weight:700;color:rgba(0,90,156,0.05);position:absolute;right:14px;top:10px;}
-  .ml-date{font-size:11px;color:var(--blue-mid);letter-spacing:2px;margin-bottom:7px;}
-  .ml-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px;}
-  .ml-desc{font-size:13px;color:var(--muted);line-height:1.7;}
-
-  .accent{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%);padding:52px 24px;text-align:center;}
-  .accent-q{font-family:'Oswald',sans-serif;font-size:clamp(18px,3vw,26px);color:#fff;font-weight:400;line-height:1.6;}
-  .accent-q span{color:var(--gold-light);}
-  .accent-langs{margin-top:18px;display:flex;flex-direction:column;gap:5px;align-items:center;}
-  .accent-langs p{font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:1px;}
-
-  .about-ph{border:1.5px dashed rgba(0,90,156,0.18);border-radius:8px;padding:60px;text-align:center;background:#fff;}
-  .about-ph-title{font-family:'Oswald',sans-serif;font-size:20px;color:rgba(0,90,156,0.22);letter-spacing:3px;margin-bottom:10px;}
-  .about-ph-text{font-size:13px;color:rgba(90,122,150,0.45);letter-spacing:1px;}
-
-  footer{background:var(--blue);padding:36px 24px;text-align:center;}
-  footer p{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.45);}
-  footer strong{color:var(--gold-light);font-weight:500;}
-
-  @media(max-width:640px){.nav-links{display:none;}.hero-name{font-size:72px;}.hero-stats{gap:16px;}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Will 棒球成長軌跡｜12歲游擊手・捕手｜大谷翔平 x 山本由伸風格">
+    <title>Will ⚾ 棒球成長之路</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        
+        :root {
+            --dodgers-blue: #005A9C;
+            --dodgers-red: #EF3E42;
+            --black: #1A1A1A;
+        }
+        
+        * {
+            font-family: 'Noto Sans TC', system-ui, sans-serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(0, 90, 156, 0.85), rgba(0, 90, 156, 0.85)), 
+                        url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #EF3E42;
+            transform: translateY(-2px);
+        }
+        
+        .section-title {
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, #005A9C, #EF3E42);
+            border-radius: 9999px;
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 25px 50px -12px rgb(0 90 156 / 0.25);
+        }
+        
+        .timeline-dot {
+            animation: pulse 2s infinite;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-[#f8f9fa] text-[#1A1A1A]">
 
-<nav>
-  <div class="nav-inner">
-    <div class="nav-logo">WILL</div>
-    <ul class="nav-links">
-      <li><a href="#story">成長軌跡</a></li>
-      <li><a href="#video">精彩影片</a></li>
-      <li><a href="#gallery">照片集錦</a></li>
-      <li><a href="#stats">數據統計</a></li>
-      <li><a href="#milestones">里程碑</a></li>
-      <li><a href="#about">關於</a></li>
-    </ul>
-  </div>
-</nav>
+    <!-- NAVBAR -->
+    <nav class="bg-[#005A9C] text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 text-2xl font-black tracking-tighter">
+                <span class="text-4xl">⚾</span>
+                <div>
+                    <span class="text-white">Will</span>
+                    <span class="text-[#EF3E42]">棒球</span>
+                </div>
+                <span class="text-sm font-medium bg-white/20 px-3 py-1 rounded-full">12歲成長軌跡</span>
+            </div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-bg">
-    <div class="hero-bg-img" id="heroBg"></div>
-  </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-overlay-bottom"></div>
-  <div class="hero-subject" id="heroSubject"></div>
-  <div class="hero-content">
-    <div class="hero-lang">棒球成長紀錄 · Baseball Journey · 野球の軌跡</div>
-    <div class="hero-pos">
-      <div class="pos-badge">SS 游擊手</div>
-      <div class="pos-badge gold">C 捕手</div>
-    </div>
-    <div class="hero-name">W<span>I</span>LL</div>
-    <div class="hero-tagline">
-      從10歲踏上球場，以游擊手的視野與捕手的鬥志，書寫屬於自己的棒球故事。
-      <em>Since 2022 · Taiwan · Age 12</em>
-    </div>
-    <div class="hero-stats">
-      <div class="hstat"><div class="hstat-num">2022</div><div class="hstat-label">入門元年</div></div>
-      <div class="hstat"><div class="hstat-num">12</div><div class="hstat-label">歲 · Age</div></div>
-      <div class="hstat"><div class="hstat-num">SS/C</div><div class="hstat-label">守備位置</div></div>
-    </div>
-  </div>
-  <div class="scroll-hint"><span>SCROLL</span><div class="scroll-line"></div></div>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-8 text-lg font-medium">
+                <a href="#about" class="nav-link">關於Will</a>
+                <a href="#journey" class="nav-link">成長軌跡</a>
+                <a href="#gallery" class="nav-link">照片集</a>
+                <a href="#videos" class="nav-link">影片精華</a>
+                <a href="#stats" class="nav-link">成績數據</a>
+                <a href="#social" class="nav-link">IG & YouTube</a>
+            </div>
 
+            <!-- Mobile Menu Button -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-3xl">
+                <i class="fa-solid fa-bars" id="menu-icon"></i>
+            </button>
 
-</div>
+            <!-- Right side -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="https://www.instagram.com/" target="_blank" 
+                   class="bg-white text-[#005A9C] px-5 py-2 rounded-2xl font-bold flex items-center gap-2 hover:bg-[#EF3E42] hover:text-white transition-colors">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>IG</span>
+                </a>
+                <a href="https://www.youtube.com/" target="_blank" 
+                   class="bg-white text-[#005A9C] px-5 py-2 rounded-2xl font-bold flex items-center gap-2 hover:bg-[#EF3E42] hover:text-white transition-colors">
+                    <i class="fa-brands fa-youtube"></i>
+                    <span>YT</span>
+                </a>
+            </div>
+        </div>
 
-<div class="wave"><svg viewBox="0 0 1200 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" width="100%" height="56"><path d="M0,0 C300,56 900,0 1200,44 L1200,0 Z" fill="#F5F9FD"/></svg></div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-[#005A9C] border-t border-white/20 px-6 py-6 text-lg">
+            <div class="flex flex-col gap-6">
+                <a href="#about" onclick="toggleMobileMenu()" class="nav-link">關於Will</a>
+                <a href="#journey" onclick="toggleMobileMenu()" class="nav-link">成長軌跡</a>
+                <a href="#gallery" onclick="toggleMobileMenu()" class="nav-link">照片集</a>
+                <a href="#videos" onclick="toggleMobileMenu()" class="nav-link">影片精華</a>
+                <a href="#stats" onclick="toggleMobileMenu()" class="nav-link">成績數據</a>
+                <a href="#social" onclick="toggleMobileMenu()" class="nav-link">IG & YouTube</a>
+                <div class="flex gap-4 pt-4 border-t border-white/20">
+                    <a href="https://www.instagram.com/" target="_blank" class="flex-1 text-center bg-white text-[#005A9C] py-4 rounded-2xl font-bold">IG</a>
+                    <a href="https://www.youtube.com/" target="_blank" class="flex-1 text-center bg-white text-[#005A9C] py-4 rounded-2xl font-bold">YouTube</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<div class="sw">
-<section id="story">
-  <div class="slabel">GROWTH TIMELINE · 成長の軌跡</div>
-  <div class="stitle">成長軌跡</div>
-  <div class="stitle-sub">Growth Timeline · 成長タイムライン</div>
-  <div class="tl">
-    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2022</div><div class="tli-title">棒球元年 — 踏入球場</div><div class="tli-en">First Year · 野球元年</div><div class="tli-desc">10歲，第一次認真拿起球棒與捕手裝備，開始系統性訓練。對棒球的熱情從這一年被點燃。</div></div>
-    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2023</div><div class="tli-title">雙守備位置確立</div><div class="tli-en">Dual Position · 二刀流守備</div><div class="tli-desc">確立游擊手與捕手雙守備位置路線，鍛鍊傳球精準度、閱讀比賽能力與捕手領導特質。</div></div>
-    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2024 — 2025</div><div class="tli-title">競技舞台 — 實戰淬鍊</div><div class="tli-en">Competition · 実戦経験</div><div class="tli-desc">參與各級別比賽，在真實對抗中累積經驗，不斷突破自我極限。</div></div>
-    <div class="tli"><div class="tli-dot"></div><div class="tli-year">2025 →</div><div class="tli-title">下一個目標</div><div class="tli-en">Next Goal · 次の目標</div><div class="tli-desc">朝美國、日本棒球學校選拔目標邁進，書寫屬於自己的棒球故事。</div></div>
-  </div>
-</section>
-<div class="divider"></div>
+    <!-- HERO -->
+    <header id="home" class="hero-bg h-screen flex items-center text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center h-full">
+            <div class="space-y-6">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-6 py-2 rounded-3xl text-sm font-medium">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EF3E42] opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-[#EF3E42]"></span>
+                    </span>
+                    12歲・游擊手・捕手・台北
+                </div>
+                
+                <h1 class="text-6xl md:text-7xl font-black leading-none tracking-tighter">
+                    WILL<br>棒球成長之路
+                </h1>
+                
+                <p class="text-2xl md:text-3xl font-medium max-w-lg">
+                    從11歲認真接觸棒球<br>
+                    現在12歲的我，正朝著大谷翔平 × 山本由伸的夢想前進！
+                </p>
 
-<section id="video">
-  <div class="slabel">HIGHLIGHT REEL · 精彩集錦 · ハイライト</div>
-  <div class="stitle">精彩影片</div>
-  <div class="stitle-sub">Highlight Video · ハイライト動画</div>
-  <div class="video-wrap">
-    <div class="video-placeholder" id="videoPH">
-      <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-      <span>貼入 YouTube 連結後載入</span>
-    </div>
-    <iframe id="videoFrame" src="" allow="autoplay;fullscreen" allowfullscreen style="display:none;width:100%;aspect-ratio:16/9;border:none;"></iframe>
-  </div>
-  <div class="input-row">
-    <input id="videoInput" placeholder="YouTube 影片網址（支援不公開影片）">
-    <button class="btn-blue" onclick="loadVideo()">載入影片</button>
-  </div>
-  <div class="input-hint">建議上傳至 YouTube 並設定為「不公開」，有連結才看得到，不出現在搜尋結果。</div>
-</section>
-<div class="divider"></div>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#journey" 
+                       class="bg-[#EF3E42] hover:bg-white hover:text-[#1A1A1A] text-white px-10 py-5 rounded-3xl font-bold text-xl flex items-center gap-3 transition-all">
+                        看我的成長軌跡
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                    <a href="#social" 
+                       class="border-2 border-white hover:bg-white hover:text-[#005A9C] px-8 py-5 rounded-3xl font-bold text-xl flex items-center gap-3 transition-all">
+                        <i class="fa-brands fa-instagram text-2xl"></i>
+                        追蹤我的日常
+                    </a>
+                </div>
 
-<section id="gallery">
-  <div class="slabel">PHOTO GALLERY · 照片集錦 · フォトギャラリー</div>
-  <div class="stitle">照片集錦</div>
-  <div class="stitle-sub">Photo Gallery · フォトギャラリー</div>
-  <div class="carousel" id="carousel">
-    <div class="c-track" id="cTrack">
-      <div class="c-slide-ph">
-        <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12" r="3.5"/></svg>
-        <span>新增第一張照片</span>
-      </div>
-    </div>
-    <button class="c-btn c-prev" onclick="cMove(-1)"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
-    <button class="c-btn c-next" onclick="cMove(1)"><svg viewBox="0 0 24 24"><polyline points="9,6 15,12 9,18"/></svg></button>
-  </div>
-  <div class="c-dots" id="cDots"></div>
-  <div class="photo-add">
-    <input id="pUrl" placeholder="Google Photos 單張圖片連結">
-    <input id="pTitle" placeholder="標題" style="max-width:140px;">
-    <select id="pTag">
-      <option value="比賽">比賽</option><option value="練習">練習</option>
-      <option value="守備">守備</option><option value="打擊">打擊</option><option value="隊伍">隊伍</option>
-    </select>
-    <button class="btn-blue" onclick="addPhoto()">新增</button>
-    <button class="btn-red" onclick="removePhoto()">移除此張</button>
-  </div>
-  <div style="font-size:12px;color:var(--muted);margin-top:8px;max-width:900px;margin-left:auto;margin-right:auto;">
-    Google Photos：開啟單張照片 → 右上角「⋮」→「建立連結」→ 複製貼入。
-  </div>
-</section>
-</div>
+                <div class="flex items-center gap-8 pt-6 text-sm">
+                    <div>
+                        <div class="text-[#EF3E42] text-4xl font-black">11</div>
+                        <div class="font-medium">歲開始認真訓練</div>
+                    </div>
+                    <div class="h-12 w-px bg-white/50"></div>
+                    <div>
+                        <div class="text-[#EF3E42] text-4xl font-black">游擊手</div>
+                        <div class="font-medium">主要位置</div>
+                    </div>
+                    <div class="h-12 w-px bg-white/50"></div>
+                    <div>
+                        <div class="text-[#EF3E42] text-4xl font-black">捕手</div>
+                        <div class="font-medium">第二專長</div>
+                    </div>
+                </div>
+            </div>
 
-<div class="accent">
-  <div class="accent-q">"每一次揮棒，都是<span>成為更好的自己</span>的練習。"</div>
-  <div class="accent-langs">
-    <p>"Every swing is a step toward becoming a better version of yourself."</p>
-    <p>「一振り一振りが、より良い自分への一歩。」</p>
-  </div>
-</div>
+            <!-- 右側英雄圖 -->
+            <div class="hidden md:flex justify-end">
+                <div class="relative">
+                    <div class="absolute -inset-6 bg-gradient-to-br from-[#EF3E42] to-[#005A9C] opacity-20 blur-3xl rounded-[100px]"></div>
+                    <img src="https://picsum.photos/id/1015/800/900" 
+                         alt="Will 棒球英姿"
+                         class="w-96 h-auto rounded-3xl shadow-2xl rotate-[-8deg] border-8 border-white object-cover">
+                    <div class="absolute -bottom-6 -right-6 bg-white text-[#005A9C] text-2xl font-black px-8 py-4 rounded-3xl shadow-xl flex items-center gap-3">
+                        ⚾
+                        <span>大谷 × 山本 風格</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="sw">
-<section id="stats">
-  <div class="slabel">PERFORMANCE DATA · 成績統計 · 成績データ</div>
-  <div class="stitle">數據統計</div>
-  <div class="stitle-sub">Performance Stats · 成績データ</div>
-  <div class="stats-note">數據累積中——隨賽季推進，各項數據將陸續更新。/ Stats will be updated as the season progresses.</div>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">打擊率 · AVG</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Batting Average</div></div>
-    <div class="stat-card"><div class="stat-label">出賽場次 · GAMES</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Games Played</div></div>
-    <div class="stat-card"><div class="stat-label">安打數 · HITS</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Total Hits</div></div>
-    <div class="stat-card"><div class="stat-label">打點 · RBI</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Runs Batted In</div></div>
-    <div class="stat-card"><div class="stat-label">守備率 · FLD%</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Fielding %</div></div>
-    <div class="stat-card"><div class="stat-label">盜壘 · SB</div><div class="stat-val stat-ph">—</div><div class="stat-unit">Stolen Bases</div></div>
-  </div>
-</section>
-<div class="divider"></div>
+        <!-- 滾動提示 -->
+        <div class="absolute bottom-10 left-1/2 flex flex-col items-center gap-2 text-white/70">
+            <div class="text-sm font-medium tracking-widest">SCROLL FOR MORE</div>
+            <i class="fa-solid fa-chevron-down animate-bounce text-3xl"></i>
+        </div>
+    </header>
 
-<section id="milestones">
-  <div class="slabel">KEY MOMENTS · 重要時刻 · 重要な瞬間</div>
-  <div class="stitle">里程碑</div>
-  <div class="stitle-sub">Key Milestones · マイルストーン</div>
-  <div class="ml-grid">
-    <div class="ml-card"><div class="ml-num">01</div><div class="ml-date">2022</div><div class="ml-title">踏上球場第一天</div><div class="ml-desc">正式開始棒球訓練，一切從零出發。/ First day of formal baseball training.</div></div>
-    <div class="ml-card"><div class="ml-num">02</div><div class="ml-date">待新增</div><div class="ml-title">生涯首支安打</div><div class="ml-desc">比賽中打出生涯第一支安打，留下歷史性時刻。</div></div>
-    <div class="ml-card"><div class="ml-num">03</div><div class="ml-date">待新增</div><div class="ml-title">首場先發出賽</div><div class="ml-desc">正式站上競技舞台，以先發身份完整出賽。</div></div>
-    <div class="ml-card"><div class="ml-num">04</div><div class="ml-date">待新增</div><div class="ml-title">重要賽事紀錄</div><div class="ml-desc">持續累積中——每一個重要時刻都將被記錄在此。</div></div>
-  </div>
-</section>
-<div class="divider"></div>
+    <!-- ABOUT -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="bg-[#005A9C] text-white text-sm font-bold px-6 py-2 rounded-full">CHAPTER 01</span>
+                <h2 class="section-title text-5xl font-black mt-4">關於 Will</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-12 gap-12 items-center">
+                <div class="md:col-span-7">
+                    <p class="text-2xl leading-relaxed text-gray-700">
+                        嗨！我是 <span class="font-black text-[#005A9C]">Will</span>，今年12歲，住在台北。<br>
+                        11歲那年，我正式認真接觸棒球，從此愛上這項運動！<br><br>
+                        我目前主要守備位置是<span class="font-black text-[#EF3E42]">游擊手</span>，同時也練<span class="font-black text-[#EF3E42]">捕手</span>。每一次練習、每一次比賽，我都想像自己像大谷翔平一樣全能，像山本由伸一樣精準有力！
+                    </p>
+                    <div class="mt-12 flex gap-8 text-sm">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-heart text-[#EF3E42] text-4xl"></i>
+                            <div>
+                                <div class="font-bold">熱愛</div>
+                                <div>棒球、團隊、挑戰</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-trophy text-[#005A9C] text-4xl"></i>
+                            <div>
+                                <div class="font-bold">目標</div>
+                                <div>成為職業球員</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:col-span-5 bg-gradient-to-br from-[#005A9C] to-[#1A1A1A] text-white p-8 rounded-3xl">
+                    <div class="text-[#EF3E42] text-sm font-bold mb-4">Will 的棒球宣言</div>
+                    <p class="italic text-3xl leading-tight">"每一次揮棒，都是朝夢想更近一步！<br>大谷的二刀流精神、山本的專注力，我都要擁有！"</p>
+                    <div class="mt-8 text-right text-sm">- Will，2026</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section id="about">
-  <div class="slabel">PROFILE · 關於 · プロフィール</div>
-  <div class="stitle">關於 Will</div>
-  <div class="stitle-sub">About · プロフィール</div>
-  <div class="about-ph">
-    <div class="about-ph-title">COMING SOON</div>
-    <div class="about-ph-text">個人簡介、目標宣言及徵選聯絡資訊即將上線<br>Profile, goals & recruitment contact · プロフィール近日公開</div>
-  </div>
-</section>
-</div>
+    <!-- JOURNEY TIMELINE -->
+    <section id="journey" class="py-20 bg-[#005A9C] text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="bg-white text-[#005A9C] text-sm font-bold px-6 py-2 rounded-full">CHAPTER 02</span>
+                <h2 class="section-title text-5xl font-black mt-4 text-white">成長軌跡</h2>
+            </div>
 
-<footer>
-  <p><strong>WILL</strong> · 棒球成長紀錄 · Baseball Journey · 野球の軌跡</p>
-  <p style="margin-top:6px;">SS 游擊手 / C 捕手 · Taiwan · Since 2022</p>
-</footer>
+            <div class="max-w-3xl mx-auto relative">
+                <!-- 時間軸線 -->
+                <div class="absolute left-8 top-10 bottom-10 w-1 bg-white/30 rounded-full"></div>
+                
+                <div class="space-y-12">
+                    <!-- 11歲 -->
+                    <div class="flex gap-8 relative">
+                        <div class="w-16 h-16 bg-white text-[#005A9C] rounded-2xl flex items-center justify-center text-4xl font-black flex-shrink-0 z-10">11</div>
+                        <div class="flex-1 bg-white/10 backdrop-blur-md p-8 rounded-3xl">
+                            <div class="flex justify-between">
+                                <h3 class="text-2xl font-bold">11歲・開始認真接觸棒球</h3>
+                                <span class="text-[#EF3E42] text-sm font-medium">2025</span>
+                            </div>
+                            <p class="mt-3">第一次拿起手套，愛上球場的感覺。從零開始練習守備與打擊。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 12歲 -->
+                    <div class="flex gap-8 relative">
+                        <div class="w-16 h-16 bg-[#EF3E42] text-white rounded-2xl flex items-center justify-center text-4xl font-black flex-shrink-0 z-10">12</div>
+                        <div class="flex-1 bg-white/10 backdrop-blur-md p-8 rounded-3xl">
+                            <div class="flex justify-between">
+                                <h3 class="text-2xl font-bold">12歲・現在進行式</h3>
+                                <span class="text-white text-sm font-medium">2026</span>
+                            </div>
+                            <p class="mt-3">主守游擊手，同時強化捕手技術。參加比賽、練習不間斷！</p>
+                            <div class="mt-6 flex gap-4 text-sm">
+                                <span class="bg-white/20 px-4 py-2 rounded-2xl">游擊手守備</span>
+                                <span class="bg-white/20 px-4 py-2 rounded-2xl">捕手蹲捕</span>
+                                <span class="bg-white/20 px-4 py-2 rounded-2xl">打擊練習</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 未來 -->
+                    <div class="flex gap-8 relative">
+                        <div class="w-16 h-16 bg-white/30 text-white rounded-2xl flex items-center justify-center text-4xl flex-shrink-0 z-10">→</div>
+                        <div class="flex-1 bg-white/10 backdrop-blur-md p-8 rounded-3xl opacity-75">
+                            <h3 class="text-2xl font-bold">未來里程碑</h3>
+                            <p class="mt-3 text-white/70">持續更新比賽成績、數據統計、重要時刻… 一起見證我成為下一個棒球傳奇！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-// ── LOAD PHOTOS FROM UPLOADED IMAGES ──
-// Catcher photo (bg) and batting photo (subject) are loaded as data URLs via fetch
-const CATCHER_SRC = 'IMG_7269.HEIC'; // fallback label only
-// We embed via canvas trick — but since we have the images shown in chat,
-// we use the two uploaded image objects directly as object URLs
+    <!-- GALLERY -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <span class="bg-[#005A9C] text-white text-sm font-bold px-6 py-2 rounded-full">CHAPTER 03</span>
+                    <h2 class="section-title text-5xl font-black mt-4">照片集</h2>
+                </div>
+                <a href="#" class="text-[#005A9C] font-medium flex items-center gap-2 hover:gap-3 transition-all">
+                    查看全部照片 <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- 請把以下 src 換成你自己的照片網址 -->
+                <div class="card-hover rounded-3xl overflow-hidden shadow-xl aspect-square bg-gray-200">
+                    <img src="https://picsum.photos/id/1015/600/600" alt="Will 守備" class="w-full h-full object-cover">
+                </div>
+                <div class="card-hover rounded-3xl overflow-hidden shadow-xl aspect-square bg-gray-200">
+                    <img src="https://picsum.photos/id/1005/600/600" alt="Will 打擊" class="w-full h-full object-cover">
+                </div>
+                <div class="card-hover rounded-3xl overflow-hidden shadow-xl aspect-square bg-gray-200">
+                    <img src="https://picsum.photos/id/133/600/600" alt="Will 練習" class="w-full h-full object-cover">
+                </div>
+                <div class="card-hover rounded-3xl overflow-hidden shadow-xl aspect-square bg-gray-200">
+                    <img src="https://picsum.photos/id/201/600/600" alt="Will 比賽" class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <p class="text-center text-sm text-gray-500 mt-8">👆 點擊上方照片可放大 • 把你的比賽＆練習照片替換進來即可</p>
+        </div>
+    </section>
 
-// Since we can't directly access uploaded files in artifact,
-// we store placeholder state and let user load via Google Photos links.
-// Hero is pre-styled with deep blue atmosphere matching the catcher photo mood.
+    <!-- VIDEOS -->
+    <section id="videos" class="py-20 bg-[#1A1A1A] text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <span class="bg-[#EF3E42] text-white text-sm font-bold px-6 py-2 rounded-full">CHAPTER 04</span>
+                    <h2 class="section-title text-5xl font-black mt-4 text-white">影片精華</h2>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 替換成你的 YouTube 影片 ID -->
+                <div class="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl">
+                    <iframe width="100%" height="100%" 
+                            src="https://www.youtube.com/embed/dQw4w9wgxcQ" 
+                            title="Will 棒球影片" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                </div>
+                <div class="aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl">
+                    <iframe width="100%" height="100%" 
+                            src="https://www.youtube.com/embed/dQw4w9wgxcQ" 
+                            title="Will 棒球影片 2" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// ── VIDEO ──
-function loadVideo(){
-  const url = document.getElementById('videoInput').value.trim();
-  if(!url) return;
-  let embed = '';
-  const yt = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  if(yt) embed = `https://www.youtube.com/embed/${yt[1]}?rel=0&autoplay=0`;
-  if(!embed){ alert('請貼入有效的 YouTube 網址'); return; }
-  const f = document.getElementById('videoFrame');
-  f.src = embed;
-  f.style.display = 'block';
-  document.getElementById('videoPH').style.display = 'none';
-}
+    <!-- STATS -->
+    <section id="stats" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="bg-[#005A9C] text-white text-sm font-bold px-6 py-2 rounded-full">CHAPTER 05</span>
+                <h2 class="section-title text-5xl font-black mt-4">成績＆里程碑</h2>
+                <p class="text-gray-500 mt-4">目前持續更新中 • 未來將加入完整數據統計表</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-hover bg-gradient-to-br from-[#005A9C] to-[#1A1A1A] text-white p-8 rounded-3xl text-center">
+                    <div class="text-7xl font-black mb-2">.320</div>
+                    <div class="text-lg">打擊率（目前）</div>
+                    <div class="text-xs text-white/60 mt-6">2026 春季練習賽</div>
+                </div>
+                <div class="card-hover bg-white border border-[#005A9C] p-8 rounded-3xl text-center">
+                    <div class="text-7xl font-black text-[#005A9C] mb-2">8</div>
+                    <div class="text-lg">安打數</div>
+                    <div class="text-xs text-gray-500 mt-6">最近5場比賽</div>
+                </div>
+                <div class="card-hover bg-white border border-[#EF3E42] p-8 rounded-3xl text-center">
+                    <div class="text-7xl font-black text-[#EF3E42] mb-2">12</div>
+                    <div class="text-lg">守備次數（游擊手）</div>
+                    <div class="text-xs text-gray-500 mt-6">無失誤紀錄進行中</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// ── CAROUSEL ──
-let slides = [], cur = 0;
+    <!-- SOCIAL & RECRUITMENT -->
+    <section id="social" class="py-20 bg-[#005A9C] text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16">
+                <!-- IG & YT -->
+                <div>
+                    <h2 class="text-5xl font-black mb-8">追蹤我的成長</h2>
+                    <div class="space-y-8">
+                        <a href="https://www.instagram.com/" target="_blank" 
+                           class="flex items-center justify-between bg-white/10 hover:bg-white/20 backdrop-blur-md p-6 rounded-3xl transition-all group">
+                            <div class="flex items-center gap-6">
+                                <i class="fa-brands fa-instagram text-6xl"></i>
+                                <div>
+                                    <div class="text-2xl font-bold">Instagram</div>
+                                    <div class="text-white/70">@will_baseball_tw</div>
+                                </div>
+                            </div>
+                            <div class="text-4xl group-hover:translate-x-2 transition">→</div>
+                        </a>
+                        
+                        <a href="https://www.youtube.com/" target="_blank" 
+                           class="flex items-center justify-between bg-white/10 hover:bg-white/20 backdrop-blur-md p-6 rounded-3xl transition-all group">
+                            <div class="flex items-center gap-6">
+                                <i class="fa-brands fa-youtube text-6xl"></i>
+                                <div>
+                                    <div class="text-2xl font-bold">YouTube</div>
+                                    <div class="text-white/70">Will Baseball Journey</div>
+                                </div>
+                            </div>
+                            <div class="text-4xl group-hover:translate-x-2 transition">→</div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 棒球學校徵選 -->
+                <div class="bg-white text-[#1A1A1A] rounded-3xl p-10 flex flex-col justify-between">
+                    <div>
+                        <div class="inline-flex items-center gap-2 bg-[#EF3E42] text-white text-sm font-bold px-6 py-2 rounded-3xl">🔥 未來計畫</div>
+                        <h2 class="text-4xl font-black mt-6 leading-none">這份紀錄<br>也將成為我<br>申請棒球學校的<br>最強素材！</h2>
+                        <p class="mt-8 text-lg">教練、球探、學校招生單位歡迎聯絡我～<br>一起見證台灣小將的成長！</p>
+                    </div>
+                    <a href="mailto:your@email.com" 
+                       class="mt-12 inline-block bg-[#EF3E42] text-white px-10 py-6 rounded-3xl font-bold text-xl text-center hover:scale-105 transition">
+                        📧 聯絡 Will 或家長
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-function toDirectPhoto(url){
-  // Google Photos share link
-  if(url.includes('photos.app.goo.gl') || url.includes('photos.google.com')){
-    // Can't bypass Google Photos redirect — inform user
-    return url;
-  }
-  // Imgur direct
-  if(url.includes('imgur.com') && !url.includes('i.imgur.com')){
-    return url.replace('imgur.com/', 'i.imgur.com/') + (url.includes('.') ? '' : '.jpg');
-  }
-  return url;
-}
+    <!-- FOOTER -->
+    <footer class="bg-[#1A1A1A] text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex justify-center gap-2 text-4xl mb-6">⚾🌟⚾</div>
+            <p class="text-xl">© 2026 Will 棒球成長軌跡 • 純手工打造，結合大谷＆山本的夢想藍白紅風格</p>
+            <p class="text-white/50 text-sm mt-6">分享給家人朋友 • 未來推廣棒球學校徵選素材</p>
+            
+            <div class="mt-12 text-xs text-white/30 flex flex-wrap justify-center gap-x-6">
+                <p>Made with ❤️ in Taipei for Will</p>
+                <p>Responsive 一頁式網站 • 手機、平板、電腦皆完美顯示</p>
+            </div>
+        </div>
+    </footer>
 
-function renderCarousel(){
-  const track = document.getElementById('cTrack');
-  const dots = document.getElementById('cDots');
-  if(slides.length === 0){
-    track.innerHTML = `<div class="c-slide-ph"><svg viewBox="0 0 24 24" fill="none" stroke="#4AAEE8" stroke-width="1.5" width="36" height="36"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12" r="3.5"/></svg><span>新增第一張照片</span></div>`;
-    dots.innerHTML = '';
-    return;
-  }
-  track.innerHTML = slides.map((s,i) =>
-    `<div class="c-slide" style="background-image:url('${s.url}')">
-      <div class="c-caption"><div class="c-tag">${s.tag}</div><div>${s.title}</div></div>
-    </div>`
-  ).join('');
-  dots.innerHTML = slides.map((_,i) =>
-    `<button class="cdot${i===cur?' active':''}" onclick="goTo(${i})"></button>`
-  ).join('');
-  goTo(cur, false);
-}
-
-function goTo(idx, anim=true){
-  if(!slides.length) return;
-  cur = (idx + slides.length) % slides.length;
-  const t = document.getElementById('cTrack');
-  t.style.transition = anim ? 'transform .4s cubic-bezier(.4,0,.2,1)' : 'none';
-  t.style.transform = `translateX(-${cur*100}%)`;
-  document.querySelectorAll('.cdot').forEach((d,i) => d.classList.toggle('active', i===cur));
-}
-function cMove(d){ goTo(cur+d); }
-
-function addPhoto(){
-  const url = document.getElementById('pUrl').value.trim();
-  const title = document.getElementById('pTitle').value.trim() || '照片';
-  const tag = document.getElementById('pTag').value;
-  if(!url) return;
-  slides.push({url: toDirectPhoto(url), title, tag});
-  cur = slides.length - 1;
-  document.getElementById('pUrl').value = '';
-  document.getElementById('pTitle').value = '';
-  renderCarousel();
-}
-function removePhoto(){
-  if(!slides.length) return;
-  slides.splice(cur, 1);
-  cur = Math.max(0, cur-1);
-  renderCarousel();
-}
-
-// auto-advance
-setInterval(()=>{ if(slides.length > 1) goTo(cur+1); }, 5000);
-
-// ── HERO UPLOAD ──
-function loadHeroBg(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const el = document.getElementById('heroBg');
-    el.style.backgroundImage = `url(${ev.target.result})`;
-    el.style.backgroundSize = 'cover';
-    el.style.backgroundPosition = 'center top';
-    el.style.opacity = '0.55';
-    el.style.background = '';
-  };
-  reader.readAsDataURL(file);
-}
-
-function loadHeroSubject(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const el = document.getElementById('heroSubject');
-    el.style.backgroundImage = `url(${ev.target.result})`;
-    el.style.opacity = '1';
-  };
-  reader.readAsDataURL(file);
-}
-</script>
+    <script>
+        // Tailwind 設定
+        function initializeTailwind() {
+            tailwind.config = {
+                content: [],
+                theme: {
+                    extend: {}
+                }
+            }
+        }
+        
+        // 行動版選單
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu')
+            const icon = document.getElementById('menu-icon')
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden')
+                icon.classList.replace('fa-bars', 'fa-xmark')
+            } else {
+                menu.classList.add('hidden')
+                icon.classList.replace('fa-xmark', 'fa-bars')
+            }
+        }
+        
+        // 平滑滾動
+        function smoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') return
+                    e.preventDefault()
+                    const target = document.querySelector(this.getAttribute('href'))
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        })
+                    }
+                })
+            })
+        }
+        
+        // 初始化
+        window.onload = function() {
+            initializeTailwind()
+            smoothScroll()
+            console.log('%c🌟 Will 棒球成長網站載入完成！大谷 x 山本風格已就緒 ⚾', 'color:#EF3E42; font-weight:bold')
+        }
+    </script>
 </body>
 </html>
