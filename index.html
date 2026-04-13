@@ -3,139 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will ⚾ 棒球成長之路 | 12歲游擊手・捕手</title>
+    <title>Will Wang ⚾ 棒球成長之路</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
-        
         * { font-family: 'Noto Sans TC', system-ui, sans-serif; }
         
         .hero-bg {
-            background: linear-gradient(rgba(26,26,26,0.85), rgba(0,48,135,0.82)), 
+            background: linear-gradient(rgba(0,48,135,0.85), rgba(0,48,135,0.9)), 
                         url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
-        }
-        
-        .timeline-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 6px;
-            background: #003087;
-            transform: translateX(-50%);
-        }
-        
-        @media (max-width: 768px) {
-            .timeline-line { left: 40px; }
         }
     </style>
 </head>
-<body class="bg-[#f8f9fa] text-[#1A1A1A]">
+<body class="bg-zinc-50 text-zinc-900">
 
-    <!-- NAVBAR -->
-    <nav class="bg-[#003087] text-white sticky top-0 z-50 shadow-lg">
+    <!-- Navbar -->
+    <nav class="bg-[#003087] text-white sticky top-0 z-50 shadow">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
             <div class="flex items-center gap-3 text-2xl font-black">
                 <span class="text-4xl">⚾</span>
-                <div>Will <span class="text-[#C8102E]">棒球</span></div>
+                <span>Will Wang</span>
             </div>
-            
-            <div class="hidden md:flex gap-8 text-base font-medium">
+            <div class="hidden md:flex gap-8 text-base">
                 <a href="#about" class="hover:text-[#C8102E]">關於我</a>
                 <a href="#journey" class="hover:text-[#C8102E]">成長軌跡</a>
                 <a href="#gallery" class="hover:text-[#C8102E]">照片集</a>
                 <a href="#videos" class="hover:text-[#C8102E]">影片</a>
-                <a href="#social" class="hover:text-[#C8102E]">追蹤我</a>
+                <a href="#contact" class="hover:text-[#C8102E]">聯絡我</a>
             </div>
-            
-            <button onclick="toggleMenu()" class="md:hidden text-3xl">
-                <i class="fa-solid fa-bars"></i>
-            </button>
         </div>
     </nav>
 
-    <!-- HERO -->
+    <!-- Hero -->
     <header class="hero-bg min-h-screen flex items-center text-white">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
-            <div class="md:col-span-7 space-y-8">
-                <h1 class="text-5xl md:text-7xl font-black leading-none tracking-tight">
-                    我是 Will<br>這是我的棒球夢想之路
-                </h1>
-                <p class="text-2xl md:text-3xl font-medium">
-                    12歲・台北・游擊手・捕手<br>
-                    從11歲開始認真訓練，我要成為像大谷翔平一樣強大的選手！
-                </p>
-                <a href="#journey" 
-                   class="inline-block bg-[#C8102E] hover:bg-white hover:text-black px-12 py-6 rounded-3xl font-bold text-xl transition-all">
-                    看我的成長軌跡 →
+        <div class="max-w-7xl mx-auto px-6 text-center md:text-left">
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-4">
+                WILL WANG
+            </h1>
+            <p class="text-3xl md:text-4xl font-medium mb-8">12歲棒球選手 • 游擊手 / 捕手</p>
+            <p class="max-w-xl mx-auto md:mx-0 text-xl">
+                從11歲開始認真訓練，我相信每一次練習都在讓我更接近夢想。
+            </p>
+            <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <a href="#journey" class="bg-[#C8102E] hover:bg-white hover:text-black px-10 py-5 rounded-3xl font-bold text-lg transition">
+                    看我的成長軌跡
                 </a>
-            </div>
-            <div class="md:col-span-5 hidden md:block">
-                <img src="https://picsum.photos/id/1015/800/1000" 
-                     alt="Will 棒球英姿" 
-                     class="rounded-3xl shadow-2xl border-8 border-white">
+                <a href="#contact" class="border-2 border-white hover:bg-white hover:text-[#003087] px-10 py-5 rounded-3xl font-bold text-lg transition">
+                    聯絡我
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- ABOUT -->
+    <!-- About -->
     <section id="about" class="py-20 bg-white">
         <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-black mb-8">關於我</h2>
-            <p class="text-xl leading-relaxed text-gray-700">
+            <h2 class="text-5xl font-black mb-8">我是 Will Wang</h2>
+            <p class="text-xl leading-relaxed text-zinc-700">
                 大家好，我是 Will，今年12歲，住在台北。<br><br>
-                從11歲那一年，我真正愛上棒球，開始認真訓練。現在我主要守游擊手，同時也在努力練習捕手。<br><br>
-                <strong>「每一次揮棒、每一次守備，我都告訴自己：再快一點、再準一點、再強一點！」</strong><br>
-                我相信，只要持續努力，總有一天我也能像大谷翔平一樣，在球場上展現全力以赴的熱血！
+                從11歲那年我真正愛上棒球，開始每天認真訓練。現在我主要守游擊手，同時也在努力練捕手。<br><br>
+                <strong>「我不會害怕失敗，因為每一次跌倒，都是讓我變得更強的機會。」</strong><br>
+                我要像大谷翔平一樣全力以赴，像山本由伸一樣專注精準，一步一步朝職業球員的夢想前進！
             </p>
         </div>
     </section>
 
-    <!-- 成長軌跡（簡單時間軸） -->
-    <section id="journey" class="py-20 bg-[#f8f9fa] relative">
+    <!-- Timeline -->
+    <section id="journey" class="py-20 bg-zinc-100">
         <div class="max-w-4xl mx-auto px-6">
             <h2 class="text-5xl font-black text-center mb-12">我的棒球成長軌跡</h2>
             
             <div class="relative pl-12 md:pl-0">
-                <div class="timeline-line hidden md:block"></div>
+                <div class="absolute left-6 top-0 bottom-0 w-1 bg-[#003087] hidden md:block"></div>
                 
                 <div class="space-y-16">
-                    <!-- 11歲 -->
                     <div class="flex gap-8">
-                        <div class="w-16 h-16 bg-[#003087] text-white rounded-2xl flex items-center justify-center text-4xl font-bold flex-shrink-0">11</div>
-                        <div class="flex-1 bg-white p-8 rounded-3xl shadow">
-                            <h3 class="text-2xl font-bold text-[#003087]">2025 年・11歲</h3>
-                            <p class="mt-4 text-gray-700">
-                                我正式開始認真接觸棒球。那時候我告訴自己：「從今天起，我要全力以赴！」<br>
-                                從最基本的守備和打擊開始，每天練習都不放棄。
-                            </p>
+                        <div class="w-14 h-14 bg-[#003087] text-white rounded-2xl flex items-center justify-center text-3xl font-bold flex-shrink-0">11</div>
+                        <div>
+                            <h3 class="text-2xl font-bold">11歲（2025）・開始認真訓練</h3>
+                            <p class="mt-2 text-zinc-600">我正式拿起手套與球棒，每天練習守備和打擊。那一刻我告訴自己：「從現在開始，我要全力以赴！」</p>
                         </div>
                     </div>
-
-                    <!-- 12歲 -->
+                    
                     <div class="flex gap-8">
-                        <div class="w-16 h-16 bg-[#C8102E] text-white rounded-2xl flex items-center justify-center text-4xl font-bold flex-shrink-0">12</div>
-                        <div class="flex-1 bg-white p-8 rounded-3xl shadow">
-                            <h3 class="text-2xl font-bold text-[#C8102E]">2026 年・12歲 現在</h3>
-                            <p class="mt-4 text-gray-700">
-                                我現在主要守游擊手，同時也在練捕手。<br>
-                                每一次上場我都告訴自己：「不要怕失敗，要勇敢去挑戰！」<br>
-                                我的目標是：成為守備穩、打擊強的全面選手！
-                            </p>
+                        <div class="w-14 h-14 bg-[#C8102E] text-white rounded-2xl flex items-center justify-center text-3xl font-bold flex-shrink-0">12</div>
+                        <div>
+                            <h3 class="text-2xl font-bold">12歲（2026）・現在進行式</h3>
+                            <p class="mt-2 text-zinc-600">我目前主守游擊手，同時強化捕手技術。每次上場我都全力以赴，享受每一次進步的喜悅。</p>
                         </div>
                     </div>
-
-                    <!-- 未來 -->
+                    
                     <div class="flex gap-8">
-                        <div class="w-16 h-16 bg-gray-800 text-white rounded-2xl flex items-center justify-center text-4xl font-bold flex-shrink-0">→</div>
-                        <div class="flex-1 bg-white p-8 rounded-3xl shadow">
-                            <h3 class="text-2xl font-bold">我的未來夢想</h3>
-                            <p class="mt-4 text-gray-700">
-                                我要繼續努力，累積比賽經驗，提升自己的數據。<br>
-                                有一天，我希望能站在更大的舞台上，像大谷翔平一樣全力以赴，像山本由伸一樣專注精準！<br>
-                                <strong class="block mt-4">"The only way to do great work is to love what you do." — Steve Jobs</strong>
-                            </p>
+                        <div class="w-14 h-14 bg-zinc-800 text-white rounded-2xl flex items-center justify-center text-4xl font-bold flex-shrink-0">→</div>
+                        <div>
+                            <h3 class="text-2xl font-bold">未來目標</h3>
+                            <p class="mt-2 text-zinc-600">持續累積比賽經驗，提升數據，申請更好的棒球學校或訓練營。有一天，我要站上更大的舞台！</p>
                         </div>
                     </div>
                 </div>
@@ -143,71 +106,58 @@
         </div>
     </section>
 
-    <!-- 照片集 -->
+    <!-- Gallery -->
     <section id="gallery" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-5xl font-black text-center mb-12">我的比賽與練習照片</h2>
+            <h2 class="text-5xl font-black text-center mb-12">我的照片集</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                <!-- ← 請把以下圖片連結換成你自己的真實照片 -->
-                <img src="https://picsum.photos/id/1015/600/600" alt="Will 游擊手守備" class="rounded-3xl shadow-md w-full aspect-square object-cover">
-                <img src="https://picsum.photos/id/133/600/600" alt="Will 捕手練習" class="rounded-3xl shadow-md w-full aspect-square object-cover">
-                <img src="https://picsum.photos/id/201/600/600" alt="Will 打擊瞬間" class="rounded-3xl shadow-md w-full aspect-square object-cover">
+                <!-- ← 請把以下連結換成你自己的真實照片網址 -->
+                <img src="https://picsum.photos/id/1015/600/600" alt="Will 守備" class="rounded-3xl shadow w-full aspect-square object-cover">
+                <img src="https://picsum.photos/id/133/600/600" alt="Will 打擊" class="rounded-3xl shadow w-full aspect-square object-cover">
+                <img src="https://picsum.photos/id/201/600/600" alt="Will 練習" class="rounded-3xl shadow w-full aspect-square object-cover">
             </div>
         </div>
     </section>
 
-    <!-- 影片 -->
-    <section id="videos" class="py-20 bg-[#1A1A1A] text-white">
+    <!-- Videos -->
+    <section id="videos" class="py-20 bg-zinc-900 text-white">
         <div class="max-w-5xl mx-auto px-6">
             <h2 class="text-5xl font-black text-center mb-12">我的練習與比賽影片</h2>
             <div class="grid md:grid-cols-2 gap-8">
-                <!-- ← 請把下面的影片ID換成你的YouTube影片ID -->
-                <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9wgxcQ" 
-                        title="Will 棒球影片" frameborder="0" allowfullscreen class="rounded-3xl"></iframe>
-                <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9wgxcQ" 
-                        title="Will 棒球影片2" frameborder="0" allowfullscreen class="rounded-3xl"></iframe>
+                <!-- ← 請把 dQw4w9wgxcQ 換成你的 YouTube 影片 ID -->
+                <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9wgxcQ" frameborder="0" allowfullscreen class="rounded-3xl"></iframe>
+                <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9wgxcQ" frameborder="0" allowfullscreen class="rounded-3xl"></iframe>
             </div>
         </div>
     </section>
 
-    <!-- 社群與聯絡 -->
-    <section id="social" class="py-20 bg-[#003087] text-white">
+    <!-- Contact -->
+    <section id="contact" class="py-20 bg-[#003087] text-white">
         <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-black mb-10">一起追蹤我的成長吧！</h2>
+            <h2 class="text-5xl font-black mb-8">一起追蹤我的成長</h2>
             
-            <a href="https://www.instagram.com/willwang.baseball" target="_blank" 
-               class="inline-flex items-center gap-4 bg-white/10 hover:bg-white/20 px-12 py-7 rounded-3xl text-2xl mb-6 transition-all">
+            <a href="https://www.instagram.com/willwang.baseball" target="_blank"
+               class="inline-flex items-center gap-4 bg-white/10 hover:bg-white/20 px-10 py-6 rounded-3xl text-2xl mb-6 transition">
                 <i class="fa-brands fa-instagram text-4xl"></i>
-                <span>Instagram：@willwang.baseball</span>
+                Instagram @willwang.baseball
             </a>
             
-            <a href="https://www.youtube.com/" target="_blank" 
-               class="inline-flex items-center gap-4 bg-white/10 hover:bg-white/20 px-12 py-7 rounded-3xl text-2xl transition-all">
-                <i class="fa-brands fa-youtube text-4xl"></i>
-                <span>YouTube：Will Baseball Journey</span>
-            </a>
-            
-            <div class="mt-16 pt-12 border-t border-white/30">
-                <p class="text-2xl mb-6">想跟我或我的家人聊聊棒球嗎？</p>
+            <div class="mt-12">
+                <p class="text-2xl mb-6">想聯絡我嗎？</p>
                 <a href="mailto:rainbowrumen@gmail.com" 
-                   class="bg-[#C8102E] hover:bg-white hover:text-black px-12 py-7 rounded-3xl text-xl font-bold inline-flex items-center gap-3 transition-all">
+                   class="bg-[#C8102E] hover:bg-white hover:text-black px-12 py-7 rounded-3xl text-xl font-bold inline-flex items-center gap-3 transition">
                     <i class="fa-solid fa-envelope"></i>
-                    寄信給我：rainbowrumen@gmail.com
+                    rainbowrumen@gmail.com
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="bg-[#1A1A1A] text-white py-12 text-center">
-        <p class="text-2xl mb-2">⚾ Will 的棒球夢想</p>
-        <p class="text-sm text-gray-400">© 2026 台北・台灣 • 持續努力，永不放棄</p>
+    <!-- Footer -->
+    <footer class="bg-zinc-900 text-white py-12 text-center">
+        <p class="text-xl">© 2026 Will Wang • 台北棒球選手</p>
+        <p class="text-sm text-zinc-400 mt-2">持續努力，永不放棄我的棒球夢想 ⚾</p>
     </footer>
 
-    <script>
-        function toggleMenu() {
-            alert("行動版選單已開啟！（目前為簡易版，可再擴充）");
-        }
-    </script>
 </body>
 </html>
